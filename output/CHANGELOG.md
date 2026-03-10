@@ -1,5 +1,8 @@
 # Changelog
 
+## Bug Fixes
+- fix: correct changelog generation logic (6297761)
+
 ## Documentation
 - docs: add generated changelog output (c487f7a)
 
