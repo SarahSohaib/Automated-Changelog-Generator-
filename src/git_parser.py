@@ -1,48 +1,32 @@
 import subprocess
 
-
 def get_commits(repo_path="."):
-    """
-    Extract commits from the git repository.
-    Returns a list of commit dictionaries.
-    """
 
-    try:
-        command = [
-            "git",
-            "-C",
-            repo_path,
-            "log",
-            "--pretty=format:%h|%an|%ad|%s",
-            "--date=short"
-        ]
+    command = [
+        "git",
+        "-C",
+        repo_path,
+        "log",
+        "--pretty=format:%h|%an|%ad|%s",
+        "--date=short"
+    ]
 
-        result = subprocess.run(
-            command,
-            capture_output=True,
-            text=True,
-            check=True
-        )
+    result = subprocess.run(command, capture_output=True, text=True)
 
-        commits = []
+    commits = []
 
-        for line in result.stdout.split("\n"):
-            parts = line.split("|")
+    for line in result.stdout.split("\n"):
 
-            if len(parts) != 4:
-                continue
+        parts = line.split("|")
 
-            commit = {
-                "hash": parts[0],
-                "author": parts[1],
-                "date": parts[2],
-                "message": parts[3]
-            }
+        if len(parts) != 4:
+            continue
 
-            commits.append(commit)
+        commits.append({
+            "hash": parts[0],
+            "author": parts[1],
+            "date": parts[2],
+            "message": parts[3]
+        })
 
-        return commits
-
-    except subprocess.CalledProcessError:
-        print("Error reading git history")
-        return []
+    return commits

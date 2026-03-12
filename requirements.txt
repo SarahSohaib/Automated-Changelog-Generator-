@@ -1,1 +1,5 @@
-# No external dependencies required
+streamlit
+pandas
+matplotlib
+fpdf
+gitpython
