@@ -2,6 +2,11 @@ import subprocess
 
 
 def get_commits(repo_path="."):
+    """
+    Extract commits from the git repository.
+    Returns a list of commit dictionaries.
+    """
+
     try:
         command = [
             "git",
@@ -27,15 +32,17 @@ def get_commits(repo_path="."):
             if len(parts) != 4:
                 continue
 
-            commits.append({
+            commit = {
                 "hash": parts[0],
                 "author": parts[1],
                 "date": parts[2],
                 "message": parts[3]
-            })
+            }
+
+            commits.append(commit)
 
         return commits
 
-    except Exception as e:
-        print("Error reading git history:", e)
+    except subprocess.CalledProcessError:
+        print("Error reading git history")
         return []
