@@ -20,6 +20,10 @@ if not commits:
 # Convert commits to dataframe
 df = pd.DataFrame(commits)
 
+# Ensure 'is_merge' column exists (safety)
+if "is_merge" not in df.columns:
+    df["is_merge"] = False
+
 # Categorization logic
 def categorize(message):
     message = message.lower()
@@ -36,23 +40,36 @@ def categorize(message):
     else:
         return "Other"
 
+# Apply categorization
 df["category"] = df["message"].apply(categorize)
 
+# Override category for merge commits
+df.loc[df["is_merge"], "category"] = "Merges"
+
+# 🔹 Display merge metric
 st.subheader("📊 Commit Statistics")
 
+merge_count = int(df["is_merge"].sum())
+st.metric("Merge Commits", merge_count)
+
+# Pie chart
 counts = df["category"].value_counts()
 
-fig, ax = plt.subplots()
-ax.pie(counts, labels=counts.index, autopct='%1.1f%%')
-ax.set_title("Commit Type Distribution")
+if counts.empty:
+    st.warning("Not enough data to generate statistics.")
+else:
+    fig, ax = plt.subplots()
+    ax.pie(counts, labels=counts.index, autopct='%1.1f%%')
+    ax.set_title("Commit Type Distribution")
+    st.pyplot(fig)
 
-st.pyplot(fig)
-
+# Live changelog
 st.subheader("📜 Live Changelog")
 
 changelog = generate_changelog(commits)
 st.markdown(f"```markdown\n{changelog}\n```")
 
+# Download PDF
 st.subheader("📥 Download Changelog")
 
 pdf_bytes = export_pdf(changelog)

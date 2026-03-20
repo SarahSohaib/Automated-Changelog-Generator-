@@ -1,17 +1,4 @@
-# Demo Script
 
-1. Introduce the project
-2. Explain the problem of manual changelog maintenance
-3. Show the repository structure
-4. Explain source code files
-5. Run the generator
-
-python src/main.py --repo . --output output/CHANGELOG.md
-
-6. Show generated changelog
-7. Conclude with learnings
-
-# Subject to change . Filler Script right now
 
 # Automated Changelog Generator – Demo Script
 
